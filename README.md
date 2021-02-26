@@ -1,7 +1,10 @@
 ![hacs_badge](https://img.shields.io/badge/hacs-custom-orange.svg) [![BuyMeCoffee][buymecoffeebedge]][buymecoffee]
 
+
+
 # ingresso.com Sensor Component
 
+![logo.jpg](logo.png)
 
 Custom component to get movie information in your city available at ingresso.com for the home assistant
 
@@ -29,6 +32,67 @@ Custom component to get movie information in your city available at ingresso.com
   city_name: your-city-name
   partnership: your-partnership
 ```
+
+Some of the partnerships are: cinepolis, cinemark, moviecom, playarte ...
+
+Example:
+
+```yaml
+- platform: ingresso
+  city_id: 48
+  city_name: Natal
+  partnership: cinepolis
+```
+
+## Get your city id
+
+Access the url below with your UF see your city_id in the list of cities in your state.
+
+https://api-content.ingresso.com/v0/states/YOUR-UF
+
+UFs table:
+| UF        | Estate  |
+| --------- |:-----:|
+| AC      | Acre |
+| AL      | Alagoas |
+| AP      | Amapá |
+| AM      | Amazonas |
+| BA      | Bahia |
+| CE      | Ceará |
+| DF      | Distrito Federal |
+| ES      | Espírito Santo |
+| GO      | Goiás |
+| MT      | Mato Grosso |
+| MA      | Maranhão |
+| MS      | Mato Grosso do Sul |
+| MG      | Minas Gerais |
+| PA      | Pará |
+| PB      | Paraíba |
+| PR      | Paraná |
+| PE      | Pernambuco |
+| PI      | Piauí |
+| RJ      | Rio de Janeiro |
+| RN      | Rio Grande do Norte |
+| RS      | Rio Grande do Sul |
+| RO      | Rondônia |
+| RR      | Roraima |
+| SC      | Santa Catarina |
+| SP      | São Paulo |
+| SE      | Sergipe |
+| TO      | Tocantins |
+
+Example:
+
+https://api-content.ingresso.com/v0/states/SP
+
+```yaml
+logger:
+  default: info
+  logs:
+    custom_components.ingresso: debug
+```
+https://api-content.ingresso.com/v0/states/SP
+
 
 # Debugging
 
