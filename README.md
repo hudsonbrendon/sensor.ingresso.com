@@ -35,7 +35,7 @@ Custom component to get movie information in your city available at ingresso.com
 
 Some of the partnerships are: cinepolis, cinemark, moviecom, playarte ...
 
-Example:
+### Example:
 
 ```yaml
 - platform: ingresso
@@ -81,18 +81,9 @@ UFs table:
 | SE      | Sergipe |
 | TO      | Tocantins |
 
-Example:
+### Example:
 
 https://api-content.ingresso.com/v0/states/SP
-
-```yaml
-logger:
-  default: info
-  logs:
-    custom_components.ingresso: debug
-```
-https://api-content.ingresso.com/v0/states/SP
-
 
 # Debugging
 
