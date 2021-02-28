@@ -1,8 +1,10 @@
 {
-  "domain": "udemy",
-  "name": "Udemy",
-  "documentation": "https://github.com/hudsonbrendon/sensor.udemy",
+  "domain": "ingresso",
+  "name": "Ingresso",
+  "documentation": "https://github.com/hudsonbrendon/sensor.ingresso.com",
   "dependencies": [],
-  "codeowners": ["@hudsonbrendon"],
+  "codeowners": [
+    "@hudsonbrendon"
+  ],
   "requirements": []
 }
