@@ -85,15 +85,6 @@ Example:
 
 https://api-content.ingresso.com/v0/states/SP
 
-```yaml
-logger:
-  default: info
-  logs:
-    custom_components.ingresso: debug
-```
-https://api-content.ingresso.com/v0/states/SP
-
-
 # Debugging
 
 ```yaml
