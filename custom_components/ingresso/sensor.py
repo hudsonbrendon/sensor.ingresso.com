@@ -64,23 +64,22 @@ class IngressoSensor(Entity):
                 response = await self.session.get(url)
                 movies = await response.json()
 
-
                 for movie in movies:
                     self._movies.append(
-                            dict(
-                                title=movie["title"],
-                                poster=movie["images"][0]["url"],
-                                synopsis=movie["synopsis"],
-                                director=movie["director"],
-                                cast=movie["cast"],
-                                distributor=movie["distributor"],
-                                genres=movie["genres"],
-                                duration=movie["duration"],
-                                content_rating=movie["contentRating"],
-                                premiere_date=movie["premiereDate"]["localDate"],
-                                city=movie["city"],
-                                ticket=movie["siteURL"],
-                            )
+                        dict(
+                            title=movie["title"],
+                            poster=movie["images"][0]["url"],
+                            synopsis=movie["synopsis"],
+                            director=movie["director"],
+                            cast=movie["cast"],
+                            distributor=movie["distributor"],
+                            genres=movie["genres"],
+                            duration=movie["duration"],
+                            content_rating=movie["contentRating"],
+                            premiere_date=movie["premiereDate"]["localDate"],
+                            city=movie["city"],
+                            ticket=movie["siteURL"],
+                        )
                     )
 
         except Exception as error:
