@@ -89,7 +89,7 @@ class IngressoSensor(Entity):
                             runtime=movie["duration"],
                             rating=movie["contentRating"],
                             release="$day, $date",
-                            airdate=datetime.datetime.strptime(movie["premiereDate"]["localDate"], "%Y-%m-%dT%H:%M:%SZ"),
+                            airdate=datetime.datetime.strptime(movie["premiereDate"]["localDate"], "%Y-%m-%dT%H:%M:%SZ").isoformat(),
                             city=movie["city"],
                             ticket=movie["siteURL"],
                         )
