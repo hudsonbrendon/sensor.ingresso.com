@@ -98,7 +98,7 @@ class IngressoSensor(Entity):
     @property
     def movies(self):
         """Movies."""
-        return self._movies
+        return [i for n, i in enumerate(self._movies) if i not in self._movies[n + 1 :]]
 
     @property
     def icon(self):
