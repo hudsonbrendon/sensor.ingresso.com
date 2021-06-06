@@ -88,6 +88,7 @@ class IngressoSensor(Entity):
                             runtime=movie["duration"],
                             rating=movie["contentRating"],
                             release=movie["premiereDate"]["localDate"],
+                            airdate=movie["premiereDate"]["localDate"],
                             city=movie["city"],
                             ticket=movie["siteURL"],
                         )
