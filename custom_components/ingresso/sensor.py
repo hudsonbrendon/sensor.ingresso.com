@@ -120,6 +120,5 @@ class IngressoSensor(Entity):
     def device_state_attributes(self):
         """Attributes."""
         return {
-            "name": self.name,
-            "movies": self.movies,
+            "data": self.movies,
         }
