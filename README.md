@@ -85,14 +85,15 @@ Example:
 
 https://api-content.ingresso.com/v0/states/SP
 
-```yaml
-logger:
-  default: info
-  logs:
-    custom_components.ingresso: debug
-```
-https://api-content.ingresso.com/v0/states/SP
+# Upcoming media card support
 
+To view the movies from the configured cinema, we use the [upcoming-media-card](https://github.com/custom-cards/upcoming-media-card), install via hacs and add the configuration below (Remembering to replace sensor.cinepolis with your configured sensor) in a manual card:
+
+```yaml
+type: custom:upcoming-media-card
+entity: sensor.cinepolis
+title: Cinépolis
+```
 
 # Debugging
 
