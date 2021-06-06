@@ -64,8 +64,8 @@ class IngressoSensor(Entity):
                 response = await self.session.get(url)
                 movies = await response.json()
 
-                self._movies.append(
-                    [
+                for movie in movies:
+                    self._movies.append(
                         dict(
                             title=movie["title"],
                             poster=movie["images"][0]["url"],
@@ -80,9 +80,7 @@ class IngressoSensor(Entity):
                             city=movie["city"],
                             ticket=movie["siteURL"],
                         )
-                        for movie in movies
-                    ]
-                )
+                    )
 
         except Exception as error:
             _LOGGER.debug("%s - Could not update - %s", self._name, error)

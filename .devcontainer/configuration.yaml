@@ -8,4 +8,4 @@ sensor:
   platform: ingresso
   city_id: 48
   city_name: Natal
-  partnership: cinepolis
+  partnership: moviecom
