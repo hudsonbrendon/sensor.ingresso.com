@@ -67,35 +67,38 @@ class IngressoSensor(Entity):
                 self._movies.append(
                     {
                         "title_default": "$title",
-                        "line1_default": "Movie",
+                        "line1_default": "$rating",
                         "line2_default": "$release",
                         "line3_default": "$runtime",
                         "line4_default": "$studio",
-                        "icon": "mdi:arrow-down-bold"
+                        "icon": "mdi:arrow-down-bold",
                     }
                 )
 
                 for movie in movies:
                     self._movies.append(
                         dict(
-                            title=movie["title"],
-                            poster=movie["images"][0]["url"],
-                            synopsis=movie["synopsis"],
-                            director=movie["director"],
-                            cast=movie["cast"],
-                            studio=movie["distributor"],
-                            genres=movie["genres"],
-                            runtime=movie["duration"],
-                            rating=movie["contentRating"],
-                            release="$date",
-                            airdate=movie["premiereDate"]["localDate"].split("T")[0],
-                            city=movie["city"],
-                            ticket=movie["siteURL"],
+                            title=movie["title"] or "",
+                            poster=movie["images"][0]["url"] or "",
+                            fanart=movie["images"][1]["url"] or "",
+                            synopsis=movie["synopsis"] or "",
+                            director=movie["director"] or "",
+                            cast=movie["cast"] or "",
+                            studio=movie["distributor"] or "",
+                            genres=movie["genres"] or "",
+                            runtime=movie["duration"] or "",
+                            rating=movie["contentRating"] or "",
+                            release="$date" or "",
+                            airdate=movie["premiereDate"]["localDate"].split("T")[0] or "",
+                            city=movie["city"] or "",
+                            ticket=movie["siteURL"] or "",
                         )
                     )
 
         except Exception as error:
             _LOGGER.debug("%s - Could not update - %s", self._name, error)
+
+    def 
 
     @property
     def name(self):
