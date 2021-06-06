@@ -4,7 +4,6 @@ A platform that provides information about movies in city.
 For more details on this component, refer to the documentation at
 https://github.com/hudsonbrendon/sensor.ingresso.com
 """
-import datetime
 import logging
 
 import async_timeout
@@ -88,8 +87,8 @@ class IngressoSensor(Entity):
                             genres=movie["genres"],
                             runtime=movie["duration"],
                             rating=movie["contentRating"],
-                            release="$day, $date",
-                            airdate=datetime.datetime.strptime(movie["premiereDate"]["localDate"], "%Y-%m-%dT%H:%M:%SZ").isoformat(),
+                            release="$year",
+                            airdate=movie["premiereDate"]["localDate"],
                             city=movie["city"],
                             ticket=movie["siteURL"],
                         )
