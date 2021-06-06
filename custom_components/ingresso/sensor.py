@@ -64,6 +64,17 @@ class IngressoSensor(Entity):
                 response = await self.session.get(url)
                 movies = await response.json()
 
+                self._movies.append(
+                    {
+                        "title_default": "$title",
+                        "line1_default": "Movie",
+                        "line2_default": "$release",
+                        "line3_default": "$runtime",
+                        "line4_default": "$studio",
+                        "icon": "mdi:arrow-down-bold"
+                    }
+                )
+
                 for movie in movies:
                     self._movies.append(
                         dict(
@@ -72,11 +83,12 @@ class IngressoSensor(Entity):
                             synopsis=movie["synopsis"],
                             director=movie["director"],
                             cast=movie["cast"],
-                            distributor=movie["distributor"],
+                            studio=movie["distributor"],
                             genres=movie["genres"],
-                            duration=movie["duration"],
-                            content_rating=movie["contentRating"],
-                            premiere_date=movie["premiereDate"]["localDate"],
+                            runtime=movie["duration"],
+                            rating=movie["contentRating"],
+                            release="$date",
+                            airdate=movie["premiereDate"]["localDate"].split("T")[0],
                             city=movie["city"],
                             ticket=movie["siteURL"],
                         )
@@ -109,6 +121,5 @@ class IngressoSensor(Entity):
     def device_state_attributes(self):
         """Attributes."""
         return {
-            "name": self.name,
-            "movies": self.movies,
+            "data": self.movies,
         }
