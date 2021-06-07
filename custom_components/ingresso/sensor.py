@@ -98,8 +98,6 @@ class IngressoSensor(Entity):
         except Exception as error:
             _LOGGER.debug("%s - Could not update - %s", self._name, error)
 
-    def
-
     @property
     def name(self):
         """Name."""
