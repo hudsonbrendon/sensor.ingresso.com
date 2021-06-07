@@ -67,11 +67,11 @@ class IngressoSensor(Entity):
                 self._movies.append(
                     {
                         "title_default": "$title",
-                        "line1_default": "Movie",
+                        "line1_default": "$rating",
                         "line2_default": "$release",
                         "line3_default": "$runtime",
                         "line4_default": "$studio",
-                        "icon": "mdi:arrow-down-bold"
+                        "icon": "mdi:arrow-down-bold",
                     }
                 )
 
@@ -80,6 +80,7 @@ class IngressoSensor(Entity):
                         dict(
                             title=movie["title"],
                             poster=movie["images"][0]["url"],
+                            fanart=movie["images"][1]["url"],
                             synopsis=movie["synopsis"],
                             director=movie["director"],
                             cast=movie["cast"],
