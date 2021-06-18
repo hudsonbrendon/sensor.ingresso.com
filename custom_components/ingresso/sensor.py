@@ -84,7 +84,6 @@ class IngressoSensor(Entity):
                         dict(
                             title=movie["title"],
                             poster=movie["images"][0]["url"],
-                            fanart=movie["images"][0]["url"],
                             synopsis=movie["synopsis"],
                             director=movie["director"],
                             cast=movie["cast"],
