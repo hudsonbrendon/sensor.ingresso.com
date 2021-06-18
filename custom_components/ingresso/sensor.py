@@ -5,6 +5,7 @@ For more details on this component, refer to the documentation at
 https://github.com/hudsonbrendon/sensor.ingresso.com
 """
 import logging
+from datetime import timedelta
 
 import async_timeout
 import homeassistant.helpers.config_validation as cv
@@ -16,6 +17,9 @@ from homeassistant.helpers.entity import Entity
 CONF_CITY_ID = "city_id"
 CONF_CITY_NAME = "city_name"
 CONF_PARTNERSHIP = "partnership"
+CONF_SCAN_INTERVAL = "scan_interval" or timedelta(minutes=2)
+SCAN_INTERVAL = timedelta(minutes=120)
+
 
 ICON = "mdi:ticket"
 
@@ -80,7 +84,7 @@ class IngressoSensor(Entity):
                         dict(
                             title=movie["title"],
                             poster=movie["images"][0]["url"],
-                            fanart=movie["images"][1]["url"],
+                            fanart=movie["images"][0]["url"],
                             synopsis=movie["synopsis"],
                             director=movie["director"],
                             cast=movie["cast"],
