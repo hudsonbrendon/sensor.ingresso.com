@@ -43,9 +43,7 @@ async def async_setup_platform(hass, config, async_add_entities, discovery_info=
     partnership = config["partnership"]
     session = async_create_clientsession(hass)
     name = partnership.capitalize()
-    async_add_entities(
-        [IngressoSensor(city_id, city_name, partnership, name, session)], True
-    )
+    async_add_entities([IngressoSensor(city_id, city_name, partnership, name, session)], True)
 
 
 class IngressoSensor(Entity):
@@ -64,7 +62,7 @@ class IngressoSensor(Entity):
         _LOGGER.debug("%s - Running update", self._name)
         try:
             url = BASE_URL.format(self._city_id, self._partnership)
-            async with async_timeout.timeout(10, loop=self.hass.loop):
+            async with async_timeout.timeout(10):
                 response = await self.session.get(url)
                 movies = await response.json()
 
