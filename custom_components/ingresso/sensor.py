@@ -77,7 +77,7 @@ class IngressoSensor(Entity):
         return ICON
 
     @property
-    def device_state_attributes(self):
+    def extra_state_attributes(self):
         """Attributes."""
         return {
             "data": self.movies,
@@ -126,5 +126,6 @@ class IngressoSensor(Entity):
                     for movie in movies.json()
                 ]
             )
+            _LOGGER.debug("%s - Success", movies.json())
         else:
             _LOGGER.debug("%s - Error", movies.json())
