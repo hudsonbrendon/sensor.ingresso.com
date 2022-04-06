@@ -5,25 +5,24 @@ For more details on this component, refer to the documentation at
 https://github.com/hudsonbrendon/sensor.ingresso.com
 """
 import logging
-from datetime import timedelta
 
-import async_timeout
 import homeassistant.helpers.config_validation as cv
+import requests
 import voluptuous as vol
 from homeassistant.components.sensor import PLATFORM_SCHEMA
 from homeassistant.helpers.aiohttp_client import async_create_clientsession
 from homeassistant.helpers.entity import Entity
+from requests.adapters import HTTPAdapter
+from requests.packages.urllib3.util.retry import Retry
 
-CONF_CITY_ID = "city_id"
-CONF_CITY_NAME = "city_name"
-CONF_PARTNERSHIP = "partnership"
-CONF_SCAN_INTERVAL = "scan_interval" or timedelta(minutes=2)
-SCAN_INTERVAL = timedelta(minutes=120)
-
-
-ICON = "mdi:ticket"
-
-BASE_URL = "https://api-content.ingresso.com/v0/templates/nowplaying/{}?partnership={}"
+from .const import (
+    BASE_URL,
+    CONF_CITY_ID,
+    CONF_CITY_NAME,
+    CONF_PARTNERSHIP,
+    ICON,
+    SCAN_INTERVAL,
+)
 
 PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend(
     {
@@ -57,48 +56,6 @@ class IngressoSensor(Entity):
         self._name = name
         self._movies = []
 
-    async def async_update(self):
-        """Update sensor."""
-        _LOGGER.debug("%s - Running update", self._name)
-        try:
-            url = BASE_URL.format(self._city_id, self._partnership)
-            async with async_timeout.timeout(10):
-                response = await self.session.get(url)
-                movies = await response.json()
-
-                self._movies.append(
-                    {
-                        "title_default": "$title",
-                        "line1_default": "$rating",
-                        "line2_default": "$release",
-                        "line3_default": "$runtime",
-                        "line4_default": "$studio",
-                        "icon": "mdi:arrow-down-bold",
-                    }
-                )
-
-                for movie in movies:
-                    self._movies.append(
-                        dict(
-                            title=movie["title"],
-                            poster=movie["images"][0]["url"],
-                            synopsis=movie["synopsis"],
-                            director=movie["director"],
-                            cast=movie["cast"],
-                            studio=movie["distributor"],
-                            genres=movie["genres"],
-                            runtime=movie["duration"],
-                            rating=movie["contentRating"],
-                            release="$date",
-                            airdate=movie["premiereDate"]["localDate"].split("T")[0],
-                            city=movie["city"],
-                            ticket=movie["siteURL"],
-                        )
-                    )
-
-        except Exception as error:
-            _LOGGER.debug("%s - Could not update - %s", self._name, error)
-
     @property
     def name(self):
         """Name."""
@@ -112,7 +69,7 @@ class IngressoSensor(Entity):
     @property
     def movies(self):
         """Movies."""
-        return [i for n, i in enumerate(self._movies) if i not in self._movies[n + 1 :]]
+        return self._movies
 
     @property
     def icon(self):
@@ -125,3 +82,49 @@ class IngressoSensor(Entity):
         return {
             "data": self.movies,
         }
+
+    def update(self):
+        """Update sensor."""
+        _LOGGER.debug("%s - Running update", self._name)
+        url = BASE_URL.format(self._city_id, self._partnership)
+
+        retry_strategy = Retry(total=3, status_forcelist=[400, 401, 404, 500, 502, 503, 504], method_whitelist=["GET"])
+        adapter = HTTPAdapter(max_retries=retry_strategy)
+        http = requests.Session()
+        http.mount("https://", adapter)
+
+        movies = http.get(url)
+
+        if movies.ok:
+            self._movies.append(
+                {
+                    "title_default": "$title",
+                    "line1_default": "$rating",
+                    "line2_default": "$release",
+                    "line3_default": "$runtime",
+                    "line4_default": "$studio",
+                    "icon": "mdi:arrow-down-bold",
+                }
+            )
+            self._movies.extend(
+                [
+                    dict(
+                        title=movie.get("title", "Não informado"),
+                        poster=movie["images"][0]["url"],
+                        synopsis=movie.get("synopsis", "Não informado"),
+                        director=movie.get("director", "Não informado"),
+                        cast=movie.get("cast", "Não informado"),
+                        studio=movie.get("distributor", "Não informado"),
+                        genres=movie.get("genres", "Não informado"),
+                        runtime=movie.get("duration", "Não informado"),
+                        rating=movie.get("contentRating", "Não informado"),
+                        release="$date",
+                        airdate=movie["premiereDate"]["localDate"].split("T")[0],
+                        city=movie.get("city", "Não informado"),
+                        ticket=movie.get("siteURL", "Não informado"),
+                    )
+                    for movie in movies.json()
+                ]
+            )
+        else:
+            _LOGGER.debug("%s - Error", movies.json())
