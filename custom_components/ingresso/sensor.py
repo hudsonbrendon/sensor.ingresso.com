@@ -20,8 +20,8 @@ from .const import (
     CONF_CITY_ID,
     CONF_CITY_NAME,
     CONF_PARTNERSHIP,
+    DEFAULT_POSTER,
     ICON,
-    SCAN_INTERVAL,
 )
 
 PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend(
@@ -110,7 +110,7 @@ class IngressoSensor(Entity):
                 [
                     dict(
                         title=movie.get("title", "Não informado"),
-                        poster=movie["images"][0]["url"],
+                        poster=movie["images"][0]["url"] if movie["images"] else DEFAULT_POSTER,
                         synopsis=movie.get("synopsis", "Não informado"),
                         director=movie.get("director", "Não informado"),
                         cast=movie.get("cast", "Não informado"),
