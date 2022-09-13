@@ -1,9 +1,10 @@
 {
   "domain": "ingresso",
   "name": "Ingresso",
-  "version": "2.3.9",
+  "version": "2.6.1",
   "documentation": "https://github.com/hudsonbrendon/sensor.ingresso.com",
   "dependencies": [],
   "codeowners": ["@hudsonbrendon"],
-  "requirements": []
+  "requirements": [],
+  "iot_class": "cloud_polling"
 }

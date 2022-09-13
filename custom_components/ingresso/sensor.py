@@ -5,10 +5,12 @@ For more details on this component, refer to the documentation at
 https://github.com/hudsonbrendon/sensor.ingresso.com
 """
 import logging
+from typing import List
 
 import homeassistant.helpers.config_validation as cv
 import requests
 import voluptuous as vol
+from aiohttp import ClientSession
 from homeassistant.components.sensor import PLATFORM_SCHEMA
 from homeassistant.helpers.aiohttp_client import async_create_clientsession
 from homeassistant.helpers.entity import Entity
@@ -35,7 +37,7 @@ PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend(
 _LOGGER = logging.getLogger(__name__)
 
 
-async def async_setup_platform(hass, config, async_add_entities, discovery_info=None):
+async def async_setup_platform(hass, config, async_add_entities, discovery_info=None) -> None:
     """Setup sensor platform."""
     city_id = config["city_id"]
     city_name = config["city_name"]
@@ -48,7 +50,7 @@ async def async_setup_platform(hass, config, async_add_entities, discovery_info=
 class IngressoSensor(Entity):
     """Ingresso.com Sensor class"""
 
-    def __init__(self, city_id, city_name, partnership, name, session):
+    def __init__(self, city_id: int, city_name: str, partnership: str, name: str, session: ClientSession) -> None:
         self._state = city_name
         self._city_id = city_id
         self._partnership = partnership
@@ -57,36 +59,44 @@ class IngressoSensor(Entity):
         self._movies = []
 
     @property
-    def name(self):
+    def city_id(self) -> int:
+        return self._city_id
+
+    @property
+    def partnership(self) -> str:
+        return self._partnership
+
+    @property
+    def name(self) -> str:
         """Name."""
         return self._name
 
     @property
-    def state(self):
+    def state(self) -> str:
         """State."""
-        return self._state
+        return len(self.movies)
 
     @property
-    def movies(self):
+    def movies(self) -> List[dict]:
         """Movies."""
         return self._movies
 
     @property
-    def icon(self):
+    def icon(self) -> str:
         """Icon."""
         return ICON
 
     @property
-    def extra_state_attributes(self):
+    def extra_state_attributes(self) -> dict:
         """Attributes."""
         return {
             "data": self.movies,
         }
 
-    def update(self):
+    def update(self) -> None:
         """Update sensor."""
-        _LOGGER.debug("%s - Running update", self._name)
-        url = BASE_URL.format(self._city_id, self._partnership)
+        _LOGGER.debug("%s - Running update", self.name)
+        url = BASE_URL.format(self.city_id, self.partnership)
 
         retry_strategy = Retry(total=3, status_forcelist=[400, 401, 404, 500, 502, 503, 504], method_whitelist=["GET"])
         adapter = HTTPAdapter(max_retries=retry_strategy)
