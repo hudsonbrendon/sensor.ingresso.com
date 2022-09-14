@@ -24,6 +24,7 @@ from .const import (
     CONF_PARTNERSHIP,
     DEFAULT_POSTER,
     ICON,
+    SCAN_INTERVAL,
 )
 
 PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend(
