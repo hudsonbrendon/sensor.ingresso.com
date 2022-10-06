@@ -38,20 +38,31 @@ PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend(
 _LOGGER = logging.getLogger(__name__)
 
 
-async def async_setup_platform(hass, config, async_add_entities, discovery_info=None) -> None:
+async def async_setup_platform(
+    hass, config, async_add_entities, discovery_info=None
+) -> None:
     """Setup sensor platform."""
     city_id = config["city_id"]
     city_name = config["city_name"]
     partnership = config["partnership"]
     session = async_create_clientsession(hass)
     name = partnership.capitalize()
-    async_add_entities([IngressoSensor(city_id, city_name, partnership, name, session)], True)
+    async_add_entities(
+        [IngressoSensor(city_id, city_name, partnership, name, session)], True
+    )
 
 
 class IngressoSensor(Entity):
     """Ingresso.com Sensor class"""
 
-    def __init__(self, city_id: int, city_name: str, partnership: str, name: str, session: ClientSession) -> None:
+    def __init__(
+        self,
+        city_id: int,
+        city_name: str,
+        partnership: str,
+        name: str,
+        session: ClientSession,
+    ) -> None:
         self._state = city_name
         self._city_id = city_id
         self._partnership = partnership
@@ -99,12 +110,16 @@ class IngressoSensor(Entity):
         _LOGGER.debug("%s - Running update", self.name)
         url = BASE_URL.format(self.city_id, self.partnership)
 
-        retry_strategy = Retry(total=3, status_forcelist=[400, 401, 404, 500, 502, 503, 504], method_whitelist=["GET"])
+        retry_strategy = Retry(
+            total=3,
+            status_forcelist=[400, 401, 404, 500, 502, 503, 504],
+            method_whitelist=["GET"],
+        )
         adapter = HTTPAdapter(max_retries=retry_strategy)
         http = requests.Session()
         http.mount("https://", adapter)
 
-        movies = http.get(url)
+        movies = http.get(url, headers={"User-Agent": "Mozilla/5.0"})
 
         if movies.ok:
             self._movies.append(
@@ -121,7 +136,9 @@ class IngressoSensor(Entity):
                 [
                     dict(
                         title=movie.get("title", "Não informado"),
-                        poster=movie["images"][0]["url"] if movie["images"] else DEFAULT_POSTER,
+                        poster=movie["images"][0]["url"]
+                        if movie["images"]
+                        else DEFAULT_POSTER,
                         synopsis=movie.get("synopsis", "Não informado"),
                         director=movie.get("director", "Não informado"),
                         cast=movie.get("cast", "Não informado"),
@@ -130,13 +147,15 @@ class IngressoSensor(Entity):
                         runtime=movie.get("duration", "Não informado"),
                         rating=movie.get("contentRating", "Não informado"),
                         release="$date",
-                        airdate=movie["premiereDate"]["localDate"].split("T")[0],
+                        airdate=movie["premiereDate"]["localDate"].split("T")[
+                            0
+                        ],
                         city=movie.get("city", "Não informado"),
                         ticket=movie.get("siteURL", "Não informado"),
                     )
                     for movie in movies.json()
                 ]
             )
-            _LOGGER.debug("%s - Success", movies.json())
+            _LOGGER.debug("Payload received: %s", movies.json())
         else:
-            _LOGGER.debug("%s - Error", movies.json())
+            _LOGGER.debug("Error received: %s", movies.content)
