@@ -48,11 +48,15 @@ async def async_setup_platform(
     session = async_create_clientsession(hass)
     name = partnership.capitalize()
     async_add_entities(
-        [IngressoSensor(city_id, city_name, partnership, name, session)], True
+        [
+            IngressoNowPlayingSensor(city_id, city_name, partnership, name, session),
+            IngressoSoonSensor(city_id, city_name, partnership, name, session)
+        ],
+        True
     )
 
 
-class IngressoSensor(Entity):
+class IngressoNowPlayingSensor(Entity):
     """Ingresso.com Sensor class"""
 
     def __init__(
@@ -81,7 +85,7 @@ class IngressoSensor(Entity):
     @property
     def name(self) -> str:
         """Name."""
-        return self._name
+        return f"{self._name} em cartaz"
 
     @property
     def state(self) -> str:
@@ -108,7 +112,6 @@ class IngressoSensor(Entity):
     def update(self) -> None:
         """Update sensor."""
         _LOGGER.debug("%s - Running update", self.name)
-        url = BASE_URL.format(self.city_id, self.partnership)
 
         retry_strategy = Retry(
             total=3,
@@ -119,7 +122,122 @@ class IngressoSensor(Entity):
         http = requests.Session()
         http.mount("https://", adapter)
 
-        movies = http.get(url, headers={"User-Agent": "Mozilla/5.0"})
+        movies = http.get(
+            f"{BASE_URL}nowplaying/{self.city_id}?partnership={self.partnership}",
+            headers={"User-Agent": "Mozilla/5.0"}
+        )
+
+        if movies.ok:
+            self._movies.append(
+                {
+                    "title_default": "$title",
+                    "line1_default": "$rating",
+                    "line2_default": "$release",
+                    "line3_default": "$runtime",
+                    "line4_default": "$studio",
+                    "icon": "mdi:arrow-down-bold",
+                }
+            )
+            self._movies.extend(
+                [
+                    dict(
+                        title=movie.get("title", "Não informado"),
+                        poster=movie["images"][0]["url"]
+                        if movie["images"]
+                        else DEFAULT_POSTER,
+                        synopsis=movie.get("synopsis", "Não informado"),
+                        director=movie.get("director", "Não informado"),
+                        cast=movie.get("cast", "Não informado"),
+                        studio=movie.get("distributor", "Não informado"),
+                        genres=movie.get("genres", "Não informado"),
+                        runtime=movie.get("duration", "Não informado"),
+                        rating=movie.get("contentRating", "Não informado"),
+                        release="$date",
+                        airdate=movie["premiereDate"]["localDate"].split("T")[
+                            0
+                        ],
+                        city=movie.get("city", "Não informado"),
+                        ticket=movie.get("siteURL", "Não informado"),
+                    )
+                    for movie in movies.json()
+                ]
+            )
+            _LOGGER.debug("Payload received: %s", movies.json())
+        else:
+            _LOGGER.debug("Error received: %s", movies.content)
+
+
+
+class IngressoSoonSensor(Entity):
+    """Ingresso.com Sensor class"""
+
+    def __init__(
+        self,
+        city_id: int,
+        city_name: str,
+        partnership: str,
+        name: str,
+        session: ClientSession,
+    ) -> None:
+        self._state = city_name
+        self._city_id = city_id
+        self._partnership = partnership
+        self.session = session
+        self._name = name
+        self._movies = []
+
+    @property
+    def city_id(self) -> int:
+        return self._city_id
+
+    @property
+    def partnership(self) -> str:
+        return self._partnership
+
+    @property
+    def name(self) -> str:
+        """Name."""
+        return f"{self._name} em breve"
+
+    @property
+    def state(self) -> str:
+        """State."""
+        return len(self.movies)
+
+    @property
+    def movies(self) -> List[dict]:
+        """Movies."""
+        return self._movies
+
+    @property
+    def icon(self) -> str:
+        """Icon."""
+        return ICON
+
+    @property
+    def extra_state_attributes(self) -> dict:
+        """Attributes."""
+        return {
+            "data": self.movies,
+        }
+
+    def update(self) -> None:
+        """Update sensor."""
+        _LOGGER.debug("%s - Running update", self.name)
+
+        retry_strategy = Retry(
+            total=3,
+            status_forcelist=[400, 401, 404, 500, 502, 503, 504],
+            method_whitelist=["GET"],
+        )
+        adapter = HTTPAdapter(max_retries=retry_strategy)
+        http = requests.Session()
+        http.mount("https://", adapter)
+
+        movies = http.get(
+            f"{BASE_URL}soon/city/{self.city_id}?partnership={self.partnership}",
+            headers={"User-Agent": "Mozilla/5.0"}
+        )
 
         if movies.ok:
             self._movies.append(
