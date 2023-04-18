@@ -9,3 +9,4 @@ CONF_CITY_ID = "city_id"
 CONF_CITY_NAME = "city_name"
 CONF_PARTNERSHIP = "partnership"
 SCAN_INTERVAL = timedelta(minutes=120)
+DOMAIN = "ingresso"

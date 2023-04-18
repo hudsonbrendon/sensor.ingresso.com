@@ -1,0 +1,14 @@
+{
+    "title": "Ingresso.com",
+    "config": {
+        "step": {
+            "user": {
+                "data": {
+                    "city_id": "ID da cidade",
+                    "city_name": "Nome da cidade",
+                    "partnership": "ID do parceiro"
+                }
+            }
+        }
+    }
+}
