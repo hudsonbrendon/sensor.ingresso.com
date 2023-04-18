@@ -3,9 +3,3 @@ logger:
   default: error
   logs:
     custom_components.ingresso: debug
-
-sensor:
-  platform: ingresso
-  city_id: 48
-  city_name: Natal
-  partnership: cinemark

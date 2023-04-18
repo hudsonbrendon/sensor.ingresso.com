@@ -6,13 +6,13 @@ https://github.com/hudsonbrendon/sensor.ingresso.com
 """
 import logging
 from typing import List
-
+from homeassistant import core, config_entries
 import homeassistant.helpers.config_validation as cv
 import requests
 import voluptuous as vol
 from aiohttp import ClientSession
 from homeassistant.components.sensor import PLATFORM_SCHEMA
-from homeassistant.helpers.aiohttp_client import async_create_clientsession
+from homeassistant.helpers.aiohttp_client import async_get_clientsession
 from homeassistant.helpers.entity import Entity
 from requests.adapters import HTTPAdapter
 from requests.packages.urllib3.util.retry import Retry
@@ -25,6 +25,7 @@ from .const import (
     DEFAULT_POSTER,
     ICON,
     SCAN_INTERVAL,
+    DOMAIN,
 )
 
 PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend(
@@ -38,18 +39,25 @@ PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend(
 _LOGGER = logging.getLogger(__name__)
 
 
-async def async_setup_platform(
-    hass, config, async_add_entities, discovery_info=None
+async def async_setup_entry(
+    hass: core.HomeAssistant,
+    config_entry: config_entries.ConfigEntry,
+    async_add_entities,
 ) -> None:
     """Setup sensor platform."""
-    city_id = config["city_id"]
-    city_name = config["city_name"]
-    partnership = config["partnership"]
-    session = async_create_clientsession(hass)
-    name = partnership.capitalize()
-    async_add_entities(
-        [IngressoSensor(city_id, city_name, partnership, name, session)], True
-    )
+    config = hass.data[DOMAIN][config_entry.entry_id]
+
+    session = async_get_clientsession(hass)
+    sensors = [
+        IngressoSensor(
+            city_id=config[CONF_CITY_ID],
+            city_name=config[CONF_CITY_NAME],
+            partnership=config[CONF_PARTNERSHIP],
+            name=config[CONF_CITY_NAME],
+            session=session,
+        )
+    ]
+    async_add_entities(sensors, update_before_add=True)
 
 
 class IngressoSensor(Entity):
