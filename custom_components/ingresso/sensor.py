@@ -68,7 +68,16 @@ class IngressoSensor(Entity):
         self._partnership = partnership
         self.session = session
         self._name = name
-        self._movies = []
+        self._movies = [
+            {
+                "title_default": "$title",
+                "line1_default": "$rating",
+                "line2_default": "$release",
+                "line3_default": "$runtime",
+                "line4_default": "$studio",
+                "icon": "mdi:arrow-down-bold",
+            }
+        ]
 
     @property
     def city_id(self) -> int:
@@ -122,16 +131,6 @@ class IngressoSensor(Entity):
         movies = http.get(url, headers={"User-Agent": "Mozilla/5.0"})
 
         if movies.ok:
-            self._movies.append(
-                {
-                    "title_default": "$title",
-                    "line1_default": "$rating",
-                    "line2_default": "$release",
-                    "line3_default": "$runtime",
-                    "line4_default": "$studio",
-                    "icon": "mdi:arrow-down-bold",
-                }
-            )
             self._movies.extend(
                 [
                     dict(
@@ -147,9 +146,7 @@ class IngressoSensor(Entity):
                         runtime=movie.get("duration", "Não informado"),
                         rating=movie.get("contentRating", "Não informado"),
                         release="$date",
-                        airdate=movie["premiereDate"]["localDate"].split("T")[
-                            0
-                        ],
+                        airdate=movie["premiereDate"]["localDate"].split("T")[0],
                         city=movie.get("city", "Não informado"),
                         ticket=movie.get("siteURL", "Não informado"),
                     )

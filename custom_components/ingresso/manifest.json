@@ -4,7 +4,9 @@
   "version": "2.6.4",
   "documentation": "https://github.com/hudsonbrendon/sensor.ingresso.com",
   "dependencies": [],
-  "codeowners": ["@hudsonbrendon"],
+  "codeowners": [
+    "@hudsonbrendon"
+  ],
   "requirements": [],
   "iot_class": "cloud_polling"
 }
