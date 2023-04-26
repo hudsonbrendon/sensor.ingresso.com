@@ -1,14 +1,14 @@
 {
   "domain": "ingresso",
   "name": "Ingresso",
-  "version": "2.6.5",
-  "documentation": "https://github.com/hudsonbrendon/sensor.ingresso.com#readme",
-  "issue_tracker": "https://github.com/hudsonbrendon/sensor.ingresso.com/issues",
-  "dependencies": [],
   "codeowners": [
     "@hudsonbrendon"
   ],
-  "requirements": [],
+  "config_flow": true,
+  "documentation": "https://github.com/hudsonbrendon/sensor.ingresso.com#readme",
   "iot_class": "cloud_polling",
-  "config_flow": true
+  "issue_tracker": "https://github.com/hudsonbrendon/sensor.ingresso.com/issues",
+  "dependencies": [],
+  "requirements": [],
+  "version": "2.6.5"
 }
