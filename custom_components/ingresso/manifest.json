@@ -2,7 +2,8 @@
   "domain": "ingresso",
   "name": "Ingresso",
   "version": "2.6.5",
-  "documentation": "https://github.com/hudsonbrendon/sensor.ingresso.com",
+  "documentation": "https://github.com/hudsonbrendon/sensor.ingresso.com#readme",
+  "issue_tracker": "https://github.com/hudsonbrendon/sensor.ingresso.com/issues",
   "dependencies": [],
   "codeowners": [
     "@hudsonbrendon"
