@@ -9,6 +9,10 @@
                     "partnership": "Partnership"
                 }
             }
+        },
+        "error": {
+            "city_id_error": "City ID invalid",
+            "partnership_error": "Partnership invalid"
         }
     }
 }

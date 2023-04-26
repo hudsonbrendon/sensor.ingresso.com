@@ -9,6 +9,10 @@
                     "partnership": "Cinema"
                 }
             }
+        },
+        "error": {
+            "city_id_error": "ID da cidade inválido",
+            "partnership_error": "Cinema inválido"
         }
     }
 }

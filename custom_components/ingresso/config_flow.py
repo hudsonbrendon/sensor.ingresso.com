@@ -46,8 +46,8 @@ class IngressoConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                     },
                 )
 
-            errors[CONF_CITY_ID] = "auth_error"
-            errors[CONF_PARTNERSHIP] = "auth_error"
+            errors[CONF_CITY_ID] = "city_id_error"
+            errors[CONF_PARTNERSHIP] = "partnership_error"
 
         return self.async_show_form(
             step_id="user",

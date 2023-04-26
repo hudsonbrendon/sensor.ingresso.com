@@ -67,7 +67,7 @@ async def get_movies(
         url = BASE_URL.format(city_id, partnership)
         retry_strategy = Retry(
             total=3,
-            status_forcelist=[400, 401, 404, 500, 502, 503, 504],
+            status_forcelist=[400, 401, 500, 502, 503, 504],
             method_whitelist=["GET"],
         )
         adapter = HTTPAdapter(max_retries=retry_strategy)
