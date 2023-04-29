@@ -1,48 +1,47 @@
 ![hacs_badge](https://img.shields.io/badge/hacs-custom-orange.svg) [![BuyMeCoffee][buymecoffeebedge]][buymecoffee]
 
-
-
 # ingresso.com Sensor Component
 
 ![logo.jpg](logo.png)
 
 Custom component to get movie information in your city available at ingresso.com for the home assistant
 
-# Installation
+## Install
 
-## HACS
+### Installation via HACS
 
-- Have [HACS](https://hacs.xyz/) installed, this will allow you to easily update.
+Have HACS installed, this will allow you to update easily.
 
-- Add https://github.com/hudsonbrendon/sensor.ingresso.com as a custom repository with Type: Integration
-- Click Install under "Ingresso.com" integration.
-- Restart Home-Assistant.
+Adding Ingresso to HACS can be using this button:
 
-## Manual
+[![image](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=hudsonbrendon&repository=sensor.ingresso.com&category=integration)
 
-- Copy directory custom_components/ingresso to your <config dir>/custom_components directory.
-- Configure.
-- Restart Home-Assistant.
+If the button above doesn't work, add `https://github.com/hudsonbrendon/sensor.ingresso.com` as a custom repository of type Integration in HACS.
 
-# Configuration
+- Click Install on the `Ingresso` integration.
+- Restart the Home Assistant.
 
-```yaml
-- platform: ingresso
-  city_id: your-city-id
-  city_name: your-city-name
-  partnership: your-partnership
-```
+### Manual installation
 
-Some of the partnerships are: cinepolis, cinemark, moviecom, playarte ...
+- Copy `ingresso` folder from [latest release](https://github.com/hudsonbrendon/sensor.ingresso.com/releases/latest) to your `<config dir>/custom_components/` directory.
+- Restart the Home Assistant.
 
-Example:
+## Configuration
 
-```yaml
-- platform: ingresso
-  city_id: 48
-  city_name: Natal
-  partnership: cinepolis
-```
+Adding Ingresso to your Home Assistant instance can be done via the UI using this button:
+
+[![image](https://my.home-assistant.io/badges/config_flow_start.svg)](https://my.home-assistant.io/redirect/config_flow_start?domain=ingresso)
+
+### Manual Configuration
+
+If the button above doesn't work, you can also perform the following steps manually:
+
+- Navigate to your Home Assistant instance.
+- In the sidebar, click Settings.
+- From the Setup menu, select: Devices & Services.
+- In the lower right corner, click the Add integration button.
+- In the list, search and select `Ingresso`.
+- Follow the on-screen instructions to complete the setup.
 
 ## Get your city id
 
@@ -51,35 +50,35 @@ Access the url below with your UF see your city_id in the list of cities in your
 https://api-content.ingresso.com/v0/states/YOUR-UF
 
 UFs table:
-| UF        | Estate  |
+| UF | Estate |
 | --------- |:-----:|
-| AC      | Acre |
-| AL      | Alagoas |
-| AP      | Amapá |
-| AM      | Amazonas |
-| BA      | Bahia |
-| CE      | Ceará |
-| DF      | Distrito Federal |
-| ES      | Espírito Santo |
-| GO      | Goiás |
-| MT      | Mato Grosso |
-| MA      | Maranhão |
-| MS      | Mato Grosso do Sul |
-| MG      | Minas Gerais |
-| PA      | Pará |
-| PB      | Paraíba |
-| PR      | Paraná |
-| PE      | Pernambuco |
-| PI      | Piauí |
-| RJ      | Rio de Janeiro |
-| RN      | Rio Grande do Norte |
-| RS      | Rio Grande do Sul |
-| RO      | Rondônia |
-| RR      | Roraima |
-| SC      | Santa Catarina |
-| SP      | São Paulo |
-| SE      | Sergipe |
-| TO      | Tocantins |
+| AC | Acre |
+| AL | Alagoas |
+| AP | Amapá |
+| AM | Amazonas |
+| BA | Bahia |
+| CE | Ceará |
+| DF | Distrito Federal |
+| ES | Espírito Santo |
+| GO | Goiás |
+| MT | Mato Grosso |
+| MA | Maranhão |
+| MS | Mato Grosso do Sul |
+| MG | Minas Gerais |
+| PA | Pará |
+| PB | Paraíba |
+| PR | Paraná |
+| PE | Pernambuco |
+| PI | Piauí |
+| RJ | Rio de Janeiro |
+| RN | Rio Grande do Norte |
+| RS | Rio Grande do Sul |
+| RO | Rondônia |
+| RR | Roraima |
+| SC | Santa Catarina |
+| SP | São Paulo |
+| SE | Sergipe |
+| TO | Tocantins |
 
 Example:
 
